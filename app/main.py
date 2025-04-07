@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import os
 import uuid
@@ -13,6 +13,12 @@ app = FastAPI()
 # Mount the static folder for serving index.html
 static_path = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_path, html=True), name="static")
+
+@app.get("/")
+def serve_index():
+    index_path = os.path.join(static_path, "index.html")
+    with open(index_path, "r") as f:
+        return HTMLResponse(content=f.read(), status_code=200)
 
 # Job tracking dict
 jobs = {}
