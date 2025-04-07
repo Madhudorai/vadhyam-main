@@ -1,14 +1,20 @@
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 import os
 import uuid
 import tempfile
+
 from gap_filler import fill_gaps
 from delayed_mixer import synth_with_delay
 
 app = FastAPI()
 
-# Dictionary to track job statuses and paths
+# Mount the static folder for serving index.html
+static_path = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/", StaticFiles(directory=static_path, html=True), name="static")
+
+# Job tracking dict
 jobs = {}
 
 @app.post("/upload")
@@ -43,9 +49,15 @@ def get_output(job_id: str):
     return FileResponse(jobs[job_id]["output"], media_type="audio/wav")
 
 def run_gapfill(job_id, input_path, output_path):
-    fill_gaps(input_path, output_path)
+    try:
+        fill_gaps(input_path, output_path)
+    finally:
+        os.remove(input_path)
     jobs[job_id]["status"] = "done"
 
 def run_delayedmix(job_id, input_path, output_path):
-    synth_with_delay(input_path, output_path)
+    try:
+        synth_with_delay(input_path, output_path)
+    finally:
+        os.remove(input_path)
     jobs[job_id]["status"] = "done"
