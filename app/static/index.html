@@ -15,21 +15,22 @@
   <p id="result"></p>
 
   <script>
-    function upload(endpoint) {
-      const form = document.getElementById('uploadForm');
-      const formData = new FormData(form);
-      fetch(`/${endpoint}`, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('result').innerText = JSON.stringify(data, null, 2);
-      })
-      .catch(err => {
-        document.getElementById('result').innerText = "Error: " + err;
-      });
-    }
-  </script>
+  function upload(mode) {
+    const form = document.getElementById('uploadForm');
+    const formData = new FormData(form);
+    fetch(`/upload?mode=${mode}`, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+    })
+    .catch(err => {
+      document.getElementById('result').innerText = "Error: " + err;
+    });
+  }
+</script>
+
 </body>
 </html>
