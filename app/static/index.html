@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vadhyam Synth</title>
+</head>
+<body>
+  <h1>Upload Audio</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" required />
+    <br><br>
+    <button type="button" onclick="upload('gapfill')">Aalap/Virutham</button>
+    <button type="button" onclick="upload('delayedmix')">Composition</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    function upload(endpoint) {
+      const form = document.getElementById('uploadForm');
+      const formData = new FormData(form);
+      fetch(`/${endpoint}`, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById('result').innerText = "Error: " + err;
+      });
+    }
+  </script>
+</body>
+</html>
