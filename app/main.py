@@ -3,6 +3,8 @@ import tempfile
 import os
 from gap_filler import fill_gaps
 from delayed_mixer import synth_with_delay
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -26,3 +28,9 @@ async def process_delayed_mix(file: UploadFile = File(...)):
     result_path = synth_with_delay(input_path, output_path)
     return {"message": "Delayed mix complete", "output": os.path.basename(result_path)}
 
+# Serve static HTML UI
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def read_index():
+    return FileResponse("static/index.html")
