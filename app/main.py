@@ -12,7 +12,7 @@ app = FastAPI()
 
 # Mount the static folder for serving index.html
 static_path = os.path.join(os.path.dirname(__file__), "static")
-app.mount("/", StaticFiles(directory=static_path, html=True), name="static")
+app.mount("/static", StaticFiles(directory=static_path, html=True), name="static")
 
 # Job tracking dict
 jobs = {}
