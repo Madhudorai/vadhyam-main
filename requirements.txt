@@ -1,0 +1,10 @@
+uvicorn
+fastapi
+numpy>=1.21.0
+sounddevice>=0.4.5
+tensorflow==2.11.1
+tensorflow-probability==0.19.0
+ddsp==3.6.0
+soundfile
+protobuf==3.19.6
+python-multipart
